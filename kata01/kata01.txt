@@ -1,0 +1,100 @@
+This kata arose from some discussions we’ve been having at the DFW Practioners
+meetings. The problem domain is something seemingly simple: pricing goods at
+supermarkets.
+
+Some things in supermarkets have simple prices: this can of beans costs $0.65.
+Other things have more complex prices. For example:
+
+* three for a dollar (so what’s the price if I buy 4, or 5?)
+* $1.99/pound (so what does 4 ounces cost?)
+* buy two, get one free (so does the third item have a price?)
+
+This kata involves no coding. The exercise is to experiment with various models
+for representing money and prices that are flexible enough to deal with these
+(and other) pricing schemes, and at the same time are generally usable (at the
+checkout, for stock management, order entry, and so on). Spend time
+considering issues such as:
+
+* does fractional money exist?
+* when (if ever) does rounding take place?
+* how do you keep an audit trail of pricing decisions (and do you need to)?
+* are costs and prices the same class of thing?
+* if a shelf of 100 cans is priced using “buy two, get one free”, how do you
+  value the stock?
+
+This is an ideal shower-time kata, but be careful. Some of the problems are
+more subtle than they first appear. I suggest that it might take a couple of
+weeks worth of showers to exhaust the main alternatives.
+
+Goal
+
+The goal of this kata is to practice a looser style of experimental
+modelling. Look for as many different ways of handling the issues as possible.
+Consider the various tradeoffs of each. What techniques use best for exploring
+these models? For recording them? How can you validate a model is reasonable?
+
+
+
+----------
+
+An interface would be needed that could price items based on the different
+pricing schemes. Unfortunately the different pricing schemes don't take the
+same data is input but disperate data. Some take the number of items and a unit
+price, others take the unit price and weight. Others still have group pricing
+
+> * three for a dollar (so what’s the price if I buy 4, or 5?)
+
+Some stores only allow you to buy multiples but that's inflexible and leads
+to confusion at the register.
+
+> * $1.99/pound (so what does 4 ounces cost?)
+
+Generally I would think that items priced in pounds would be measured in pounds
+but a floating point number for the number of pounds would be required.
+
+* buy two, get one free (so does the third item have a price?)
+
+The third one is free so it would have a price of zero.
+
+----
+
+> * does fractional money exist?
+
+Fractional money generally doesn't exist in a supermarket context.
+
+> * when (if ever) does rounding take place?
+
+Rounding would take place when dividing by the weight of the item (e.g.
+$1.99/pound).  In this case it seems it would be prudent to always
+round up to the nearest currency base unit.
+    
+> * how do you keep an audit trail of pricing decisions (and do you need to)?
+
+Each person's reciept contains the information needed. Each transaction (reciept)
+and item should be recorded and logged.
+
+> * are costs and prices the same class of thing?
+
+Not sure what is meant here?
+
+> * if a shelf of 100 cans is priced using “buy two, get one free”, how do you
+>  value the stock?
+
+I would likely value the stock at the unit price as prices like this are usually
+temporary and simply valuing the items at 2/3 of the unit price would be under
+valuing the stock.
+
+
+> The goal of this kata is to practice a looser style of experimental
+> modelling. Look for as many different ways of handling the issues as possible.
+> Consider the various tradeoffs of each. What techniques use best for exploring
+> these models? For recording them? How can you validate a model is reasonable?
+
+I would create "modes" or "types" of items which each have their own distinct
+pricing and checkout logic (You wouldn't ask to weigh something that isn't
+priced by weight). Groups of classes or code could be built in this way. Each
+"mode" or "type" would be able to accept parameters like the unit price,
+number of items etc (buy X get Y free, X for $Y).
+
+Storage model would likely involve a fairly flexable storage schema that
+includes the values for the different modes.
