@@ -1,0 +1,154 @@
+How Big?
+===============
+
+roughly how many binary digits (bit) are required for the unsigned representation of:
+
+1,000 => 10 (2**10 = 1024)
+1,000,000 => 20 (2**20 = 1048576)
+1,000,000,000 => 30 (2**30 = 1073741824)
+1,000,000,000,000 => 40 (2**40 = 1099511627776)
+8,000,000,000,000 => 43 (2**43 = 8796093022208)
+
+----
+
+My town has approximately 20,000 residences. How much space is required to
+store the names, addresses, and a phone number for all of these (if we store
+them as characters)?
+
+Max is all well and good but I should find an average size.
+
+:Name: single string? (max 100 characters?) multiple fields? -> Average 12 characters.
+:Address: single string? (max 200 characters?) multiple fields?
+:Phone Number: 10 integers (U.S. Phone numbers only)
+
+:First Name: Avg 6 characters.
+:Last Name: Avg 6 characters
+:Street Address: Avg 25 characters.
+:City: Avg 10 characters
+:Zip Code: 5 charcters.
+:Phone Number: 10 characters.
+:Total: Avg 62 characters per residence.
+
+62 characters * 20,000 residences = 1,240,000 characters.
+if 1 character = 1 byte about 1.24 MB is needed to store
+the data. Overhead to store the data schema etc. is also likely
+so round to 1.5MB?
+
+Obviously if the data is multi-byte then the size would be bigger.
+
+----
+
+I’m storing 1,000,000 integers in a binary tree. Roughly how many nodes and
+levels can I expect the tree to have? Roughly how much space will it occupy on
+a 32-bit architecture?
+
+The depth of a fully packed (balanced) binary tree is the floor of log base 2
+of the size number of nodes or floor(log_2(n)). This doesn't count the root
+node as a depth (a tree with 1 node has depth 0).
+
+for instance floor(log_2(8)) = 3
+
+floor(log_2(1,000,000)) = 19
+This would be the minimum depth.
+
+If there were 1,000,000 integers I would expect there to be 1,000,000 nodes.
+Trick question?
+
+For each parent node there would be one or two pointers to another node.
+For each leaf node there would be zero. This is given by ceil(log_2(n))
+for a balanced tree.
+
+ceil(log_2(1,000,000)) = 20 (not many so it might even be prudent to ignore them?)
+
+((1,000,000 - 20 parent nodes) * 2 pointers * 32 bits + 1,000,000 nodes * 32 bits) * 8 bits/byte
+
+= 767989760 bytes
+
+= about 732.4 MB
+
+How Fast?
+===============
+
+My copy of Meyer’s Object Oriented Software Construction has about 1,200 body
+pages. Assuming no flow control or protocol overhead, about how long would it
+take to send it over an async 56k baud modem line?
+
+1200 pages?
+
+- how many bytes per page?
+- assume text?
+- no formatting?
+
+Assuming text with no formatting and a single page is about 300-350 words and
+each word has 6 spaces, 1 page is about 1800 to 2100 characters.
+
+Assuming a maxium size of 2100 characters for each page, and 1 byte per character,
+we get
+
+1,200 bytes * 1,200 pages = 1,440,000 bytes
+
+With a theoretical maximum of 56k bits/s for the modem =
+56,000 bits per second / 8 bits per byte = 7000 bytes per second
+
+so 1,440,000 bytes / 7000 bytes per second  = 205 seconds = 3 minutes
+
+------
+
+My binary search algorithm takes about 4.5mS to search a 10,000 entry array,
+and about 6mS to search 100,000 elements. How long would I expect it to take
+to search 10,000,000 elements (assuming I have sufficient memory to prevent
+paging).
+
+First lets find the speed per entry at each number of entries.
+
+10,000 entries / 4.5 ms = 2222.2 entries per millisecond
+100,000 entries / 6 ms = 16666.6 entries per millisecond
+
+The relationship is obviously non-linear (we would hope!). 
+
+Let's see how our speed increases with the number of items.
+
+100,000 / 10,000 = 10x entries
+16,666.6 / 2222.2 = 7.5x entries per second
+
+So for a 10x increase, our entries per second goes up 7.5x
+
+10,000,000 / 100,000 = 100 = 10 * 10
+
+So we would expect our speed to go up 7.5x and then again 7.5x.
+
+16666.6 entries per millisecond * 7.5 * 7.5 = 937500.0 entries per millisecond
+
+So for 10,000,000 items we would expect the algorithm to take
+
+10,000,000 entries / 937500 entries per millisecond = 10.6 milliseconds
+
+-------
+
+Unix passwords are stored using a one-way hash function: the original string is
+converted to the ‘encrypted’ password string, which cannot be converted back to
+the original string. One way to attack the password file is to generate all
+possible cleartext passwords, applying the password hash to each in turn and
+checking to see if the result matches the password you’re trying to crack. If
+the hashes match, then the string you used to generate the hash is the original
+password (or at least, it’s as good as the original password as far as logging
+in is concerned). In our particular system, passwords can be up to 16
+characters long, and there are 96 possible characters at each position. If it
+takes 1mS to generate the password hash, is this a viable approach to attacking
+a password?
+
+Ok. let's calculate how long it would take.
+
+The number of possible passwords is 
+
+96 possible characters ** 16 characters = 52,040,292,466,647,269,602,037,015,248,896 possible passwords
+
+That's a lot...  1 ms per hash isn't going to cut it but let's calculate it anyway.
+
+52,040,292,466,647,269,602,037,015,248,896 possible passwords * 1 ms per password =
+
+52,040,292,466,647,269,602,037,015,248,896 ms / 1000 ms per sec / 60 sec per min / 60 min per hour / 24 hour per day / 365 day per year = 
+
+1,650,186,848,891,656,189,815 years...
+
+So, No.
