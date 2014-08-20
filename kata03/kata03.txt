@@ -60,11 +60,11 @@ for a balanced tree.
 
 ceil(log_2(1,000,000)) = 20 (not many so it might even be prudent to ignore them?)
 
-((1,000,000 - 20 parent nodes) * 2 pointers * 32 bits + 1,000,000 nodes * 32 bits) * 8 bits/byte
+((1,000,000 - 20 leaf nodes) * 2 pointers * 32 bits + 1,000,000 nodes * 32 bits) / 8 bits/byte
 
-= 767989760 bytes
+= 11999840 bytes
 
-= about 732.4 MB
+= about 11.4 MB
 
 How Fast?
 ===============
