@@ -21,7 +21,7 @@ import (
 )
 
 func main() {
-        file_name := os.Args[1]
+    file_name := os.Args[1]
     file, err := os.Open(file_name)
     if (err != nil) {
         panic(err)
