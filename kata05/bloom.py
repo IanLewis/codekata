@@ -91,8 +91,15 @@ import hashlib
 
 class BloomFilter(object):
     """
-    Implements a simple bloom filter with the given size (m in the literature)
-    and list of hash functions (h_k in the literature).
+    Implements a simple bloom filter with the given size
+    (m in the literature) and list of hash functions
+    (h_k in the literature).
+
+    See: http://codekata.com/kata/kata05-bloom-filters/www.cs.wisc.edu/~cao/papers/summary-cache/node8.html
+
+    Since the PythonSDK doesn't have a compact data structure for
+    lots of binary values, we use the bitarray library to store
+    the bloomfilter.
     """
     def __init__(self, size, hashers):
         self.size = size
